@@ -112,3 +112,50 @@ The server will run at:
 👉 http://localhost:3000
 ```
 
+## 🗃️ Database Schema
+
+### 📍 Database Name: `task_manager`
+
+### 👤 `users` Table
+
+| Column     | Type           | Constraints                         |
+|------------|----------------|-------------------------------------|
+| `id`       | INT            | Primary Key, Auto Increment         |
+| `name`     | VARCHAR(255)   | Not Null                            |
+| `email`    | VARCHAR(255)   | Not Null, Unique                    |
+| `password` | VARCHAR(255)   | Not Null                            |
+| `isAdmin`  | BOOLEAN        | Default: FALSE                      |
+| `isActive` | BOOLEAN        | Default: TRUE                       |
+
+---
+
+### ✅ `tasks` Table
+
+| Column         | Type                                 | Constraints                                     |
+|----------------|--------------------------------------|-------------------------------------------------|
+| `id`           | INT                                  | Primary Key, Auto Increment                     |
+| `title`        | VARCHAR(255)                         | Not Null                                        |
+| `createdAtDate`| DATETIME                             | Default: CURRENT_TIMESTAMP                      |
+| `dueDate`      | DATETIME                             | Optional                                        |
+| `priority`     | ENUM('high', 'medium', 'normal', 'low') | Default: 'normal'                           |
+| `stage`        | ENUM('todo', 'in progress', 'completed') | Default: 'todo'                             |
+| `description`  | TEXT                                 | Optional                                        |
+| `isTrashed`    | BOOLEAN                              | Default: FALSE                                  |
+| `userId`       | INT                                  | Foreign Key → `users(id)`, On Delete CASCADE    |
+| `createdAt`    | DATETIME                             | Default: CURRENT_TIMESTAMP                      |
+| `updatedAt`    | DATETIME                             | Auto-update on modification                     |
+
+---
+
+### 📌 `task_activities` Table
+
+| Column      | Type                                                            | Constraints                                             |
+|-------------|-----------------------------------------------------------------|---------------------------------------------------------|
+| `id`        | INT                                                             | Primary Key, Auto Increment                             |
+| `taskId`    | INT                                                             | Foreign Key → `tasks(id)`, On Delete CASCADE            |
+| `userId`    | INT                                                             | Foreign Key → `users(id)`, On Delete SET NULL           |
+| `type`      | ENUM('assigned', 'started', 'in progress', 'bug', 'completed', 'commented') | Default: 'assigned'           |
+| `activity`  | TEXT                                                            | Optional                                                 |
+| `created_at`| TIMESTAMP                                                       | Default: CURRENT_TIMESTAMP                               |
+
+---
